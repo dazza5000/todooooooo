@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -29,11 +30,12 @@ public class CategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
 
-        // assign our local variables that are widgets
+        // Assign our local variables that are widgets
         addCategoryFloatingActionButton = (FloatingActionButton) findViewById(R.id.add_to_do_fab);
         categoryRecylerView = (RecyclerView) findViewById(R.id.category_recycler_view);
         categoryRecylerView.setLayoutManager(new LinearLayoutManager(CategoryActivity.this));
 
+        // Get Singleton and then retrieve the ToDoLists from the Singleton
         notebookRepository = Notebook.getInstance();
         categoryList = notebookRepository.getToDoLists();
 
@@ -64,10 +66,8 @@ public class CategoryActivity extends AppCompatActivity {
                 showInputDialog();
             }
         };
-
+        
         addCategoryFloatingActionButton.setOnClickListener(fabListener);
-
-
     }
 
     public void showInputDialog(){
