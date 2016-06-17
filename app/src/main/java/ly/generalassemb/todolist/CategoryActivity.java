@@ -49,10 +49,8 @@ public class CategoryActivity extends AppCompatActivity {
                 showInputDialog();
             }
         };
-
+        
         addCategoryFloatingActionButton.setOnClickListener(fabListener);
-
-
     }
 
     public void showInputDialog(){
