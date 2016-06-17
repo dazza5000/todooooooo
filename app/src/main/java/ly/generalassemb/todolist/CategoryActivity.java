@@ -10,12 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 public class CategoryActivity extends AppCompatActivity {
     // Declare our local variables
@@ -38,7 +37,24 @@ public class CategoryActivity extends AppCompatActivity {
         notebookRepository = Notebook.getInstance();
         categoryList = notebookRepository.getToDoLists();
 
-        categoryAdapter = new ToDoListAdapter(categoryList);
+        TaskListListener myListener = new TaskListListener() {
+            @Override
+            public void onTaskListClick(UUID taskId) {
+                Intent intent = ToDoListActivity.newIntent(CategoryActivity.this, taskId);
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onTaskListLongClick(UUID taskId) {
+                notebookRepository.removeToDoList(taskId);
+                categoryList = notebookRepository.getToDoLists();
+                categoryAdapter.setToDoLists(categoryList);
+                categoryAdapter.notifyDataSetChanged();
+            }
+        };
+
+        categoryAdapter = new ToDoListAdapter(categoryList, myListener);
 
         categoryRecylerView.setAdapter(categoryAdapter);
 
@@ -84,75 +100,11 @@ public class CategoryActivity extends AppCompatActivity {
         b.show();
     }
 
-    private class ToDoListHolder extends RecyclerView.ViewHolder implements
-            View.OnClickListener, View.OnLongClickListener {
+    public interface TaskListListener {
 
-        private ToDoList mToDoList;
+        void onTaskListClick(UUID taskId);
 
-        private TextView mNameTextView;
-
-        public ToDoListHolder(View itemView) {
-            super(itemView);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
-
-            mNameTextView = (TextView) itemView;
-
-        }
-
-        public void bindToDoList(ToDoList toDo) {
-            mToDoList = toDo;
-            mNameTextView.setText(mToDoList.getName());
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = ToDoListActivity.newIntent(CategoryActivity.this, mToDoList.getId());
-            startActivity(intent);
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            notebookRepository.removeToDoList(mToDoList.getId());
-            categoryList = notebookRepository.getToDoLists();
-            categoryAdapter.notifyDataSetChanged();
-            return true;
-        }
+        void onTaskListLongClick(UUID taskId);
     }
-
-    private class ToDoListAdapter extends RecyclerView.Adapter<ToDoListHolder> {
-
-        private List<ToDoList> toDoLists;
-
-        public ToDoListAdapter(List<ToDoList> toDoLists) {
-            this.toDoLists = toDoLists;
-        }
-
-        @Override
-        public ToDoListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(CategoryActivity.this);
-            View view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
-            return new ToDoListHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ToDoListHolder holder, int position) {
-            ToDoList toDoList = toDoLists.get(position);
-            holder.bindToDoList(toDoList);
-        }
-
-        @Override
-        public int getItemCount() {
-            return toDoLists.size();
-        }
-
-        public void setToDoLists(List<ToDoList> toDoLists) {
-            this.toDoLists = toDoLists;
-            notifyDataSetChanged();
-        }
-    }
-
-
 
 }
