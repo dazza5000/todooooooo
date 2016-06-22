@@ -69,8 +69,33 @@ public class ToDoListActivity extends AppCompatActivity {
 
         toDoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(ToDoListActivity.this, "finish me!", Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(ToDoListActivity.this);
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage("Set task to Complete?")
+                        .setTitle("To Do List Item");
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        toDoList.getmToDos().get(position).setDone(true);
+                        Toast.makeText(ToDoListActivity.this,
+                                "You're done!", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        toDoList.getmToDos().get(position).setDone(false);
+                        Toast.makeText(ToDoListActivity.this,
+                                "Keep going!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 

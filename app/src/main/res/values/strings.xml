@@ -2,4 +2,12 @@
     <string name="app_name">ToDo Tracker</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_to_do_list">ToDoListActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello. Im a fragment!</string>
+    <string name="hello_here_is_some_text">Hello. here is some text!</string>
+    <string name="title_activity_fragment">FragmentActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="ok">Complete</string>
+    <string name="cancel">Keep Working</string>
 </resources>

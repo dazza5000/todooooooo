@@ -8,16 +8,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 import java.util.UUID;
 
 public class CategoryActivity extends AppCompatActivity {
+    private static final String TAG = "CategoryActivity";
+
     // Declare our local variables
     private FloatingActionButton addCategoryFloatingActionButton;
     private RecyclerView categoryRecylerView;
@@ -25,10 +27,21 @@ public class CategoryActivity extends AppCompatActivity {
     private List<ToDoList> categoryList;
     ToDoListAdapter categoryAdapter;
 
+    String taskListName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
+
+        Log.d(TAG, "in onCreate()");
+
+        if (null != savedInstanceState) {
+
+            taskListName = savedInstanceState.getString("task_list");
+        }
+
+        Log.d(TAG, "our task list name is " +taskListName);
 
         // Assign our local variables that are widgets
         addCategoryFloatingActionButton = (FloatingActionButton) findViewById(R.id.add_to_do_fab);
@@ -85,10 +98,12 @@ public class CategoryActivity extends AppCompatActivity {
                     Toast.makeText(CategoryActivity.this, "Please enter a list title",
                             Toast.LENGTH_LONG).show();
                 } else {
+                    taskListName = editText.getText().toString();
                     ToDoList toDoList = new ToDoList(editText.getText().toString());
                     notebookRepository.addToDoList(toDoList);
                     categoryAdapter.setToDoLists(notebookRepository.getToDoLists());
                     categoryAdapter.notifyDataSetChanged();
+                    Log.d(TAG, "This is our taskListName variable" + taskListName);
                 }
             }
         });
@@ -98,6 +113,47 @@ public class CategoryActivity extends AppCompatActivity {
         });
         AlertDialog b = dialogBuilder.create();
         b.show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "in onStart()");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.d(TAG, "in onResume");
+        Log.d(TAG, "our task list name is " +taskListName);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "in onPause()");
+        Log.d(TAG, "our task list name is " +taskListName);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        Log.d(TAG, "in onStop()");
+        Log.d(TAG, "our task list name is " +taskListName);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "in onDestroy()");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("task_list", taskListName);
     }
 
     public interface TaskListListener {

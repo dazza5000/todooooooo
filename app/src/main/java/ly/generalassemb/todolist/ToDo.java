@@ -6,6 +6,7 @@ package ly.generalassemb.todolist;
 public class ToDo {
     private String name;
     private String description;
+    private boolean done;
 
     public ToDo(String name, String description) {
         this.name = name;
@@ -31,5 +32,13 @@ public class ToDo {
     @Override
     public String toString() {
         return name + " - " +description;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 }
